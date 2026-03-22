@@ -1,0 +1,75 @@
+.tone-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.tone-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+  transition: all var(--transition);
+  outline: none;
+}
+
+.tone-btn:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-surface);
+}
+
+.tone-btn--selected {
+  border-color: var(--primary) !important;
+  background: rgba(225, 29, 72, 0.06) !important;
+  box-shadow: 0 0 0 1px var(--primary), inset 0 0 20px rgba(225, 29, 72, 0.04);
+}
+
+.tone-btn__emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.tone-btn__name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.07em;
+  color: var(--text);
+}
+
+.tone-btn--selected .tone-btn__name {
+  color: var(--primary);
+}
+
+.tone-btn__desc {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+@media (max-width: 600px) {
+  .tone-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .tone-btn {
+    flex-direction: row;
+    text-align: left;
+    padding: 0.85rem 1rem;
+    min-height: 56px;
+    gap: 0.75rem;
+  }
+  .tone-btn__emoji {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .tone-btn__desc {
+    display: none;
+  }
+}

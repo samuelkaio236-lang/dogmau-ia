@@ -1,0 +1,84 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: rgba(9, 9, 11, 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04),
+    0 4px 32px rgba(0, 0, 0, 0.4);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo__icon {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  animation: float 3s ease-in-out infinite;
+}
+
+.logo__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.logo__name {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  line-height: 1;
+}
+
+.logo__sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 600px) {
+  .header {
+    padding: 0.8rem 0.9rem;
+  }
+  .logo__icon {
+    width: 50px;
+    height: 50px;
+  }
+  .logo__name {
+    font-size: 1.15rem;
+  }
+  .logo__sub {
+    display: none;
+  }
+  .badge {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.65rem;
+  }
+}
