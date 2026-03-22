@@ -103,11 +103,13 @@
 
 @media (max-width: 600px) {
   .card {
-    padding: 1.1rem 1rem;
+    padding: 1rem 0.9rem;
   }
-  /* Evita zoom no iOS ao focar inputs */
+  /* Mínimo 16px em todos os inputs/textareas — evita zoom automático do iOS */
   .name-input,
-  .context-input {
+  .context-input,
+  input,
+  textarea {
     font-size: 16px !important;
   }
 }

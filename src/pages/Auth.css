@@ -183,6 +183,41 @@ body {
 .auth-link a { color: #e8001a; font-weight: 700; text-decoration: none; }
 .auth-link a:hover { text-decoration: underline; }
 
-@media (max-width: 480px) {
-  .auth-card { padding: 32px 20px; }
+@media (max-width: 600px) {
+  body {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  .auth-page {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 32px;
+  }
+  .auth-card {
+    padding: 28px 18px 32px;
+    border-radius: 16px;
+  }
+  .auth-logo img {
+    width: 64px;
+    height: 64px;
+  }
+  .auth-logo-name {
+    font-size: 22px;
+  }
+  .auth-title {
+    font-size: 17px;
+  }
+  /* 16px mínimo em inputs — evita zoom automático do iOS */
+  .form-group input {
+    font-size: 16px;
+    padding: 14px 14px;
+  }
+  .btn-primary {
+    font-size: 18px;
+    padding: 15px;
+    min-height: 52px;
+  }
+  .form-group label {
+    font-size: 10px;
+  }
 }
