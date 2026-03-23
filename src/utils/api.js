@@ -1,10 +1,14 @@
 import { SYSTEM_PROMPT, buildUserMessage } from './prompt'
 
-export async function generateResponses({ input, context, tone, girlName }) {
+export async function generateResponses({ input, context, tone, objetivo, girlName }) {
   const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY
   if (!apiKey) throw new Error('API key não encontrada. Adicione VITE_ANTHROPIC_API_KEY no .env')
 
-  const userText = buildUserMessage(context, tone, girlName)
+  const contextWithName = girlName?.trim()
+    ? `Nome dela: ${girlName.trim()}. ${context || ''}`.trim()
+    : context
+
+  const userText = buildUserMessage(contextWithName, tone, objetivo)
 
   let userContent
 

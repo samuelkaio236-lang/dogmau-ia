@@ -1,5 +1,18 @@
 import { useState } from 'react'
 
+const OBJETIVO_LABELS = {
+  puxar:     'PUXAR ASSUNTO',
+  flertar:   'FLERTAR',
+  encontro:  'MARCAR ENCONTRO',
+  reengajar: 'REENGAJAR',
+}
+
+const TONE_LABELS = {
+  divertido:  'DIVERTIDO',
+  provocante: 'PROVOCANTE',
+  cachorrão:  'CACHORRÃO',
+}
+
 function ResponseCard({ index, text }) {
   const [copied, setCopied] = useState(false)
 
@@ -9,7 +22,6 @@ function ResponseCard({ index, text }) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Fallback for older browsers
       const el = document.createElement('textarea')
       el.value = text
       document.body.appendChild(el)
@@ -38,8 +50,11 @@ function ResponseCard({ index, text }) {
   )
 }
 
-export default function ResultsSection({ results }) {
+export default function ResultsSection({ results, objetivo, tone }) {
   if (!results || results.length === 0) return null
+
+  const objetivoLabel = OBJETIVO_LABELS[objetivo] || objetivo?.toUpperCase()
+  const toneLabel     = TONE_LABELS[tone]     || tone?.toUpperCase()
 
   return (
     <section id="results" className="results visible">
@@ -47,6 +62,13 @@ export default function ResultsSection({ results }) {
         <div className="results__title">SUAS RESPOSTAS</div>
         <div className="results__tag">✓ Pronto para usar</div>
       </div>
+
+      {objetivoLabel && toneLabel && (
+        <div className="results__context-tag">
+          {objetivoLabel} · {toneLabel}
+        </div>
+      )}
+
       {results.map((text, i) => (
         <ResponseCard key={i} index={i} text={text} />
       ))}

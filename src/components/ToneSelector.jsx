@@ -23,7 +23,7 @@ export default function ToneSelector({ selected, onChange }) {
   return (
     <div className="card">
       <div className="card__title">
-        <span className="step-num">3</span>
+        <span className="step-num">4</span>
         Escolha o tom da resposta
       </div>
       <div className="tone-grid">

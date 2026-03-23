@@ -4,6 +4,7 @@ import Hero from '../components/Hero'
 import UploadCard from '../components/UploadCard'
 import ContextCard from '../components/ContextCard'
 import ToneSelector from '../components/ToneSelector'
+import ObjectiveSelector from '../components/ObjectiveSelector'
 import GenerateButton from '../components/GenerateButton'
 import LoadingState from '../components/LoadingState'
 import ResultsSection from '../components/ResultsSection'
@@ -22,6 +23,7 @@ export default function AppMain() {
   const [input, setInput] = useState(null)
   const [girlName, setGirlName] = useState('')
   const [context, setContext] = useState('')
+  const [objetivo, setObjetivo] = useState('puxar')
   const [tone, setTone] = useState('divertido')
   const [loading, setLoading] = useState(false)
   const [loadingText, setLoadingText] = useState(LOADING_MESSAGES[0])
@@ -68,7 +70,7 @@ export default function AppMain() {
     startLoadingCycle()
 
     try {
-      const responses = await generateResponses({ input, context, tone, girlName })
+      const responses = await generateResponses({ input, context, tone, objetivo, girlName })
       setResults(responses)
     } catch (err) {
       setError(err.message || 'Erro ao gerar respostas. Tente novamente.')
@@ -97,6 +99,8 @@ export default function AppMain() {
           onContextChange={setContext}
         />
 
+        <ObjectiveSelector selected={objetivo} onChange={setObjetivo} />
+
         <ToneSelector selected={tone} onChange={setTone} />
 
         <GenerateButton onClick={handleGenerate} disabled={loading || !input} />
@@ -107,11 +111,11 @@ export default function AppMain() {
 
         {isMobile ? (
           <BottomSheet open={sheetOpen} onClose={() => setSheetOpen(false)}>
-            <ResultsSection results={results} />
+            <ResultsSection results={results} objetivo={objetivo} tone={tone} />
           </BottomSheet>
         ) : (
           <div ref={resultsRef}>
-            <ResultsSection results={results} />
+            <ResultsSection results={results} objetivo={objetivo} tone={tone} />
           </div>
         )}
       </main>
