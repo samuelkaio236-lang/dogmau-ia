@@ -1,8 +1,9 @@
 import { SYSTEM_PROMPT, buildUserMessage } from './prompt'
 
-const BACKEND_URL = 'http://localhost:3001/api/gerar'
-
 export async function generateResponses({ input, context, tone, girlName }) {
+  const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY
+  if (!apiKey) throw new Error('API key não encontrada. Adicione VITE_ANTHROPIC_API_KEY no .env')
+
   const userText = buildUserMessage(context, tone, girlName)
 
   let messageContent
@@ -31,9 +32,14 @@ export async function generateResponses({ input, context, tone, girlName }) {
     ]
   }
 
-  const res = await fetch(BACKEND_URL, {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
     body: JSON.stringify({
       model: 'claude-opus-4-6',
       max_tokens: 1024,
