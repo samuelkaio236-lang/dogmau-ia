@@ -8,6 +8,7 @@ export default function BottomNav() {
     { path: '/app',      label: 'RESPOSTAS', icon: '⚡' },
     { path: '/analise',  label: 'ANÁLISE',   icon: '🔍' },
     { path: '/historico',label: 'HISTÓRICO', icon: '📋' },
+    { path: '/perfil',   label: 'PERFIL',    icon: '👤' },
   ]
 
   return (

@@ -140,6 +140,39 @@ body {
 .form-group input:focus { border-color: #e8001a; }
 .form-group input::placeholder { color: #4a1a1a; }
 
+/* Sucesso */
+.auth-sucesso {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #86efac;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Link como botão */
+.auth-link-btn {
+  background: none;
+  border: none;
+  color: #e8001a;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+}
+.auth-link-btn:hover { text-decoration: underline; }
+
+.auth-forgot-link { margin-top: 0; margin-bottom: 2px; }
+
+.auth-subtitle-dark {
+  font-size: 13px;
+  color: #7a4444;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
 /* Erro */
 .auth-erro {
   background: rgba(232,0,26,0.07);
