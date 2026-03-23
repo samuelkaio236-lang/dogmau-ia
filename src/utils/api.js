@@ -6,10 +6,10 @@ export async function generateResponses({ input, context, tone, girlName }) {
 
   const userText = buildUserMessage(context, tone, girlName)
 
-  let messageContent
+  let userContent
 
   if (input.type === 'image') {
-    messageContent = [
+    userContent = [
       {
         type: 'image',
         source: {
@@ -24,7 +24,7 @@ export async function generateResponses({ input, context, tone, girlName }) {
       },
     ]
   } else {
-    messageContent = [
+    userContent = [
       {
         type: 'text',
         text: `CONVERSA COLADA PELO USUÁRIO:\n"""\n${input.text}\n"""\n\n${userText}`,
@@ -36,15 +36,15 @@ export async function generateResponses({ input, context, tone, girlName }) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': apiKey,
+      'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY,
       'anthropic-version': '2023-06-01',
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
-      model: 'claude-opus-4-6',
+      model: 'claude-opus-4-5',
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: messageContent }],
+      messages: [{ role: 'user', content: userContent }],
     }),
   })
 
