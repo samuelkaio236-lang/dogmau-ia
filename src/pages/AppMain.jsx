@@ -11,6 +11,7 @@ import ResultsSection from '../components/ResultsSection'
 import BottomSheet from '../components/BottomSheet'
 import { useIsMobile } from '../hooks/useIsMobile'
 import { generateResponses } from '../utils/api'
+import BottomNav from '../components/BottomNav'
 
 const LOADING_MESSAGES = [
   'Analisando a conversa...',
@@ -123,6 +124,8 @@ export default function AppMain() {
       <footer className="footer">
         DOG MAU IA © 2025 — Feito para homens que jogam pra ganhar 🐺
       </footer>
+
+      <BottomNav />
     </>
   )
 }

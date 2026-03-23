@@ -4,7 +4,8 @@ import { AuthProvider } from './context/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import Login    from './pages/Login'
 import Cadastro from './pages/Cadastro'
-import AppMain  from './pages/AppMain'   // ← seu app atual
+import AppMain  from './pages/AppMain'
+import Analise  from './pages/Analise'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/login"    element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/app"      element={<ProtectedRoute><AppMain /></ProtectedRoute>} />
+          <Route path="/analise"  element={<ProtectedRoute><Analise /></ProtectedRoute>} />
           <Route path="*"         element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
