@@ -1,0 +1,324 @@
+/* ── Layout ───────────────────────────────────────────────── */
+.hist-main {
+  padding-bottom: 6rem;
+}
+
+/* ── Filtros ──────────────────────────────────────────────── */
+.hist-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.hist-filter-btn {
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  min-height: 36px;
+}
+
+.hist-filter-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.hist-filter-btn--active {
+  border-color: var(--primary);
+  background: rgba(225, 29, 72, 0.08);
+  color: var(--primary);
+}
+
+/* ── Lista ────────────────────────────────────────────────── */
+.hist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+.hist-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color var(--transition);
+  animation: fadeInUp 0.35s ease both;
+}
+
+.hist-card:hover {
+  border-color: var(--border-hover);
+}
+
+.hist-card--resposta {
+  border-top: 2px solid rgba(225, 29, 72, 0.4);
+}
+
+.hist-card--analise {
+  border-top: 2px solid rgba(96, 165, 250, 0.4);
+}
+
+.hist-card--expanded {
+  border-color: var(--border-hover);
+}
+
+/* ── Topo do card ─────────────────────────────────────────── */
+.hist-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.hist-card__info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.hist-card__icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.hist-card__badges {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hist-badge {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  white-space: nowrap;
+}
+
+.hist-badge--objetivo {
+  border-color: rgba(225, 29, 72, 0.3);
+  color: var(--primary);
+  background: rgba(225, 29, 72, 0.06);
+}
+
+.hist-badge--tom {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.hist-badge--analise {
+  border-color: rgba(96, 165, 250, 0.3);
+  color: #60a5fa;
+  background: rgba(96, 165, 250, 0.06);
+}
+
+.hist-badge--nota {
+  border-color: rgba(34, 197, 94, 0.3);
+  color: var(--green);
+  background: var(--green-glow);
+  font-weight: 700;
+}
+
+/* ── Ações ────────────────────────────────────────────────── */
+.hist-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.hist-card__date {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.hist-icon-btn {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.hist-icon-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.hist-icon-btn--del:hover {
+  border-color: rgba(225, 29, 72, 0.4);
+  color: var(--primary);
+}
+
+/* ── Body expandido ───────────────────────────────────────── */
+.hist-card__body {
+  border-top: 1px solid var(--border);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: fadeInUp 0.2s ease;
+}
+
+/* ── Respostas expandidas ─────────────────────────────────── */
+.hist-resp {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.hist-resp__num {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--primary);
+  letter-spacing: 0.1em;
+}
+
+.hist-resp__text {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.hist-copy {
+  align-self: flex-end;
+}
+
+/* ── Análise expandida ────────────────────────────────────── */
+.hist-analise-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hist-analise-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.hist-analise-text {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.hist-steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.hist-steps li {
+  display: flex;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.hist-steps li span {
+  font-family: var(--font-display);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.hist-quote {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  border-left: 3px solid var(--primary);
+  padding-left: 0.85rem;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* ── Estado vazio ─────────────────────────────────────────── */
+.hist-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.hist-empty__icon {
+  font-size: 3rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.hist-empty__title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.hist-empty__sub {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  max-width: 260px;
+  line-height: 1.5;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .hist-card__top {
+    padding: 0.8rem 0.85rem;
+  }
+  .hist-card__body {
+    padding: 0.85rem;
+  }
+  .hist-card__date {
+    display: none;
+  }
+  .hist-icon-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 0.85rem;
+  }
+  .hist-filters {
+    gap: 0.4rem;
+  }
+  .hist-filter-btn {
+    font-size: 0.68rem;
+    padding: 0.4rem 0.75rem;
+  }
+}

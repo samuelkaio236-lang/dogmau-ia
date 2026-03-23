@@ -5,8 +5,9 @@ export default function BottomNav() {
   const { pathname } = useLocation()
 
   const tabs = [
-    { path: '/app',     label: 'RESPOSTAS', icon: '⚡' },
-    { path: '/analise', label: 'ANÁLISE',   icon: '🔍' },
+    { path: '/app',      label: 'RESPOSTAS', icon: '⚡' },
+    { path: '/analise',  label: 'ANÁLISE',   icon: '🔍' },
+    { path: '/historico',label: 'HISTÓRICO', icon: '📋' },
   ]
 
   return (

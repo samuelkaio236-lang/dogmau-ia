@@ -7,6 +7,8 @@ import {
   buildAnaliseMessage,
   buildAnaliseTextMessage,
 } from '../utils/promptAnalise'
+import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabase'
 import './Analise.css'
 
 const LOADING_MESSAGES = [
@@ -64,6 +66,7 @@ export default function Analise() {
   const [resultado, setResultado]   = useState(null)
   const loadingIntervalRef          = useRef(null)
   const resultsRef                  = useRef(null)
+  const { user }                    = useAuth()
 
   function handleFile(file) {
     if (!file || !file.type.startsWith('image/')) return
@@ -155,6 +158,16 @@ export default function Analise() {
       const jsonStr = raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim()
       const parsed  = JSON.parse(jsonStr)
       setResultado(parsed)
+
+      if (user) {
+        supabase.from('historico').insert({
+          user_id:    user.id,
+          tipo:       'analise',
+          contexto:   contexto || null,
+          tem_imagem: !!imageData,
+          analise:    parsed,
+        }).then() // fire-and-forget
+      }
 
       setTimeout(() => {
         resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })

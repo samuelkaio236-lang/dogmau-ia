@@ -12,6 +12,8 @@ import BottomSheet from '../components/BottomSheet'
 import { useIsMobile } from '../hooks/useIsMobile'
 import { generateResponses } from '../utils/api'
 import BottomNav from '../components/BottomNav'
+import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabase'
 
 const LOADING_MESSAGES = [
   'Analisando a conversa...',
@@ -35,6 +37,7 @@ export default function AppMain() {
   const loadingIntervalRef = useRef(null)
   const resultsRef = useRef(null)
   const isMobile = useIsMobile()
+  const { user } = useAuth()
 
   function startLoadingCycle() {
     let i = 0
@@ -73,6 +76,18 @@ export default function AppMain() {
     try {
       const responses = await generateResponses({ input, context, tone, objetivo, girlName })
       setResults(responses)
+
+      if (user) {
+        supabase.from('historico').insert({
+          user_id:    user.id,
+          tipo:       'resposta',
+          objetivo,
+          tom:        tone,
+          contexto:   context || null,
+          tem_imagem: input?.type === 'image',
+          respostas:  responses,
+        }).then() // fire-and-forget, não bloqueia UI
+      }
     } catch (err) {
       setError(err.message || 'Erro ao gerar respostas. Tente novamente.')
     } finally {
