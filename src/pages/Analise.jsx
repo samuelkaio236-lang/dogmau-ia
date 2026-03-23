@@ -19,23 +19,26 @@ const LOADING_MESSAGES = [
 ]
 
 const TEMP_CONFIG = {
-  'FRIA':       { color: '#60a5fa', bg: 'rgba(96,165,250,0.08)',  label: '🧊 FRIA' },
-  'MORNA':      { color: '#fbbf24', bg: 'rgba(251,191,36,0.08)',  label: '🌡️ MORNA' },
-  'QUENTE':     { color: '#f97316', bg: 'rgba(249,115,22,0.08)',  label: '🔥 QUENTE' },
-  'MUITO QUENTE': { color: '#e8001a', bg: 'rgba(232,0,26,0.08)', label: '🌋 MUITO QUENTE' },
+  'FRIA':         { color: '#60a5fa', bg: 'rgba(96,165,250,0.08)',  label: '🧊 FRIA' },
+  'MORNA':        { color: '#fbbf24', bg: 'rgba(251,191,36,0.08)',  label: '🌡️ MORNA' },
+  'QUENTE':       { color: '#f97316', bg: 'rgba(249,115,22,0.08)',  label: '🔥 QUENTE' },
+  'MUITO QUENTE': { color: '#e8001a', bg: 'rgba(232,0,26,0.08)',    label: '🌋 MUITO QUENTE' },
 }
 
 const ESTAGIOS = [
   'DESCONHECIDOS', 'INTERESSE', 'RAPPORT', 'ATRAÇÃO', 'ENCONTRO', 'RELACIONAMENTO',
 ]
 
+const TOM_CONFIG = {
+  divertido:  { badge: '😛 DIVERTIDO',   color: '#60a5fa', bg: 'rgba(96,165,250,0.08)',  border: 'rgba(96,165,250,0.25)' },
+  provocante: { badge: '😏 PROVOCANTE',  color: '#fbbf24', bg: 'rgba(251,191,36,0.06)',  border: 'rgba(251,191,36,0.25)' },
+  cacherrão:  { badge: '🔥 CACHORRÃO',   color: '#e8001a', bg: 'rgba(232,0,26,0.06)',    border: 'rgba(232,0,26,0.3)' },
+}
+
 function ProgressBar({ value, color }) {
   return (
     <div className="an-progress-track">
-      <div
-        className="an-progress-fill"
-        style={{ width: `${(value / 10) * 100}%`, background: color }}
-      />
+      <div className="an-progress-fill" style={{ width: `${(value / 10) * 100}%`, background: color }} />
     </div>
   )
 }
@@ -48,25 +51,37 @@ function AnCard({ children, accent }) {
   )
 }
 
-export default function Analise() {
-  // inputs
-  const [tab, setTab]         = useState('print')
-  const [preview, setPreview] = useState(null)
-  const [imageData, setImageData] = useState(null)
-  const [textoConversa, setTextoConversa] = useState('')
-  const [conversa, setConversa]   = useState('')
-  const [contexto, setContexto]   = useState('')
-  const fileInputRef = useRef(null)
-  const [dragOver, setDragOver]   = useState(false)
+function CopyBtn({ text }) {
+  const [copied, setCopied] = useState(false)
+  async function handleCopy() {
+    try { await navigator.clipboard.writeText(text) } catch { /* ignore */ }
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+  return (
+    <button className={`copy-btn an-copy-btn${copied ? ' copied' : ''}`} onClick={handleCopy} type="button">
+      {copied ? '✓' : '📋'}
+    </button>
+  )
+}
 
-  // estado
-  const [loading, setLoading]       = useState(false)
+export default function Analise() {
+  const [tab, setTab]               = useState('print')
+  const [preview, setPreview]       = useState(null)
+  const [imageData, setImageData]   = useState(null)
+  const [textoConversa, setTextoConversa] = useState('')
+  const [conversa, setConversa]     = useState('')
+  const [contexto, setContexto]     = useState('')
+  const fileInputRef                = useRef(null)
+  const [dragOver, setDragOver]     = useState(false)
+
+  const [loading, setLoading]         = useState(false)
   const [loadingText, setLoadingText] = useState(LOADING_MESSAGES[0])
-  const [error, setError]           = useState('')
-  const [resultado, setResultado]   = useState(null)
-  const loadingIntervalRef          = useRef(null)
-  const resultsRef                  = useRef(null)
-  const { user }                    = useAuth()
+  const [error, setError]             = useState('')
+  const [resultado, setResultado]     = useState(null)
+  const loadingIntervalRef            = useRef(null)
+  const resultsRef                    = useRef(null)
+  const { user }                      = useAuth()
 
   function handleFile(file) {
     if (!file || !file.type.startsWith('image/')) return
@@ -96,14 +111,11 @@ export default function Analise() {
     }, 2200)
   }
 
-  function stopLoadingCycle() {
-    clearInterval(loadingIntervalRef.current)
-  }
+  function stopLoadingCycle() { clearInterval(loadingIntervalRef.current) }
 
   async function handleAnalisar() {
     const temImagem = tab === 'print' && imageData
     const temTexto  = tab === 'texto' && textoConversa.trim()
-
     if (!temImagem && !temTexto) {
       setError('Envie um print ou cole o texto da conversa primeiro.')
       return
@@ -115,9 +127,6 @@ export default function Analise() {
     startLoadingCycle()
 
     try {
-      const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY
-      if (!apiKey) throw new Error('API key não encontrada.')
-
       let messageContent
       if (temImagem) {
         messageContent = [
@@ -140,7 +149,7 @@ export default function Analise() {
         },
         body: JSON.stringify({
           model: 'claude-opus-4-5',
-          max_tokens: 2048,
+          max_tokens: 3000,
           system: SYSTEM_PROMPT_ANALISE,
           messages: [{ role: 'user', content: messageContent }],
         }),
@@ -151,27 +160,20 @@ export default function Analise() {
         throw new Error(err?.error?.message || `Erro ${res.status}`)
       }
 
-      const data = await res.json()
-      const raw  = data.content?.[0]?.text || ''
-
-      // Remove markdown code block if present
+      const data    = await res.json()
+      const raw     = data.content?.[0]?.text || ''
       const jsonStr = raw.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim()
       const parsed  = JSON.parse(jsonStr)
       setResultado(parsed)
 
       if (user) {
         supabase.from('historico').insert({
-          user_id:    user.id,
-          tipo:       'analise',
-          contexto:   contexto || null,
-          tem_imagem: !!imageData,
-          analise:    parsed,
-        }).then() // fire-and-forget
+          user_id: user.id, tipo: 'analise',
+          contexto: contexto || null, tem_imagem: !!imageData, analise: parsed,
+        }).then()
       }
 
-      setTimeout(() => {
-        resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
+      setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
     } catch (err) {
       setError(err.message || 'Erro ao analisar. Tente novamente.')
     } finally {
@@ -180,36 +182,29 @@ export default function Analise() {
     }
   }
 
-  const tempCfg = resultado ? (TEMP_CONFIG[resultado.temperatura] || TEMP_CONFIG['MORNA']) : null
+  const tempCfg   = resultado ? (TEMP_CONFIG[resultado.temperatura] || TEMP_CONFIG['MORNA']) : null
   const estagioIdx = resultado ? ESTAGIOS.indexOf(resultado.estagio) : -1
 
   return (
     <>
       <div className="orb orb--1" />
       <div className="orb orb--2" />
-
       <Header />
 
       <main className="main an-main">
-
-        {/* ── Título ── */}
         <div className="an-hero">
           <div className="hero__tag">🔍 Diagnóstico de Conversa</div>
           <h1 className="an-hero__title">ANÁLISE <span>PROFUNDA</span></h1>
           <p className="hero__desc">Descubra onde você está, o que ela está sentindo e o que fazer a seguir.</p>
         </div>
 
-        {/* ── Passo 1: Conversa ── */}
+        {/* Passo 1: Conversa */}
         <div className="card">
-          <div className="card__title">
-            <span className="step-num">1</span>
-            Manda a conversa
-          </div>
+          <div className="card__title"><span className="step-num">1</span>Manda a conversa</div>
           <div className="input-tabs">
             <button className={`input-tab${tab === 'print' ? ' input-tab--active' : ''}`} onClick={() => setTab('print')} type="button">📲 Print</button>
             <button className={`input-tab${tab === 'texto' ? ' input-tab--active' : ''}`} onClick={() => setTab('texto')} type="button">💬 Colar texto</button>
           </div>
-
           {tab === 'print' && (
             <>
               {!preview && (
@@ -234,7 +229,6 @@ export default function Analise() {
               )}
             </>
           )}
-
           {tab === 'texto' && (
             <textarea
               className="context-input text-convo-input"
@@ -245,48 +239,30 @@ export default function Analise() {
           )}
         </div>
 
-        {/* ── Passo 2: O que você enviou ── */}
+        {/* Passo 2 */}
         <div className="card">
-          <div className="card__title">
-            <span className="step-num">2</span>
-            O que você enviou (opcional)
-          </div>
-          <textarea
-            className="context-input"
-            placeholder="Ex: 'Mandei uma foto nossa na praia com a legenda...' ou 'Perguntei se ela topava sair no sábado'"
-            value={conversa}
-            onChange={(e) => setConversa(e.target.value)}
-          />
+          <div className="card__title"><span className="step-num">2</span>O que você enviou (opcional)</div>
+          <textarea className="context-input" placeholder="Ex: 'Mandei uma foto nossa na praia...' ou 'Perguntei se ela topava sair no sábado'" value={conversa} onChange={(e) => setConversa(e.target.value)} />
         </div>
 
-        {/* ── Passo 3: Contexto ── */}
+        {/* Passo 3 */}
         <div className="card">
-          <div className="card__title">
-            <span className="step-num">3</span>
-            Contexto extra (opcional)
-          </div>
-          <textarea
-            className="context-input"
-            placeholder="Ex: 'A gente se conheceu há 2 semanas, foi em 1 encontro, ela ficou bem à vontade...'"
-            value={contexto}
-            onChange={(e) => setContexto(e.target.value)}
-          />
+          <div className="card__title"><span className="step-num">3</span>Contexto extra (opcional)</div>
+          <textarea className="context-input" placeholder="Ex: 'A gente se conheceu há 2 semanas, foi em 1 encontro, ela ficou bem à vontade...'" value={contexto} onChange={(e) => setContexto(e.target.value)} />
         </div>
 
-        {/* ── Botão ── */}
         <button className="gen-btn" onClick={handleAnalisar} disabled={loading} type="button">
           🔍 ANALISAR CONVERSA
         </button>
 
         {error && <div className="error-card visible">{error}</div>}
-
         <LoadingState visible={loading} text={loadingText} />
 
-        {/* ── Resultados ── */}
+        {/* ── RESULTADOS ── */}
         {resultado && (
           <div className="an-results" ref={resultsRef}>
 
-            {/* Card 1: Termômetro + Nota */}
+            {/* 1. Termômetro + Nota */}
             <AnCard accent={tempCfg.color}>
               <div className="an-card__label">DIAGNÓSTICO GERAL</div>
               <div className="an-thermo">
@@ -297,11 +273,7 @@ export default function Analise() {
                   </div>
                   <div className="an-estagio-track">
                     {ESTAGIOS.map((s, i) => (
-                      <div
-                        key={s}
-                        className={`an-estagio-step${i === estagioIdx ? ' an-estagio-step--active' : ''}${i < estagioIdx ? ' an-estagio-step--done' : ''}`}
-                        title={s}
-                      >
+                      <div key={s} className={`an-estagio-step${i === estagioIdx ? ' an-estagio-step--active' : ''}${i < estagioIdx ? ' an-estagio-step--done' : ''}`} title={s}>
                         <div className="an-estagio-dot" />
                         <div className="an-estagio-name">{s}</div>
                       </div>
@@ -311,45 +283,46 @@ export default function Analise() {
               </div>
             </AnCard>
 
-            {/* Card 2: Momento Atual */}
+            {/* 2. Momento Atual */}
             <AnCard>
-              <div className="an-card__label">MOMENTO ATUAL</div>
+              <div className="an-card__label">📍 MOMENTO ATUAL</div>
               <p className="an-text">{resultado.momentoAtual}</p>
             </AnCard>
 
-            {/* Card 3: Sinais Dela */}
+            {/* 3. Sinais Dela — objetos { sinal, interpretacao } */}
             <AnCard>
-              <div className="an-card__label">SINAIS DELA</div>
-              <ul className="an-list">
-                {resultado.sinais?.map((s, i) => (
-                  <li key={i} className="an-list__item">
+              <div className="an-card__label">👁️ SINAIS DELA</div>
+              <ul className="an-list an-list--sinais">
+                {resultado.sinais_dela?.map((s, i) => (
+                  <li key={i} className="an-sinal-item">
                     <span className="an-list__icon">👁️</span>
-                    {s}
+                    <div className="an-sinal-body">
+                      <div className="an-sinal-texto">{s.sinal ?? s}</div>
+                      {s.interpretacao && (
+                        <div className="an-sinal-interp">→ {s.interpretacao}</div>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>
             </AnCard>
 
-            {/* Card 4: Acertos e Erros */}
+            {/* 4. Acertos & Erros */}
             <AnCard>
-              <div className="an-card__label">ACERTOS & ERROS</div>
+              <div className="an-card__label">✅ ACERTOS & ❌ ERROS</div>
               <div className="an-split">
                 <div className="an-split__col an-split__col--green">
                   <div className="an-split__title">✅ Acertou</div>
-                  <ul className="an-split__list">
-                    {resultado.acertos?.map((a, i) => <li key={i}>{a}</li>)}
-                  </ul>
+                  <ul className="an-split__list">{resultado.acertos?.map((a, i) => <li key={i}>{a}</li>)}</ul>
                 </div>
                 <div className="an-split__col an-split__col--red">
                   <div className="an-split__title">❌ Errou</div>
-                  <ul className="an-split__list">
-                    {resultado.erros?.map((e, i) => <li key={i}>{e}</li>)}
-                  </ul>
+                  <ul className="an-split__list">{resultado.erros?.map((e, i) => <li key={i}>{e}</li>)}</ul>
                 </div>
               </div>
             </AnCard>
 
-            {/* Card 5: Alerta Crítico (condicional) */}
+            {/* 5. Alerta Crítico */}
             {resultado.alerta && (
               <AnCard accent="#f59e0b">
                 <div className="an-alerta">
@@ -362,9 +335,67 @@ export default function Analise() {
               </AnCard>
             )}
 
-            {/* Card 6: Próximos Passos */}
+            {/* 6. O Que Evitar */}
+            {resultado.o_que_evitar?.length > 0 && (
+              <AnCard accent="#f97316">
+                <div className="an-card__label" style={{ color: '#f97316' }}>⛔ O QUE EVITAR</div>
+                <ul className="an-evitar-list">
+                  {resultado.o_que_evitar.map((item, i) => (
+                    <li key={i} className="an-evitar-item">
+                      <span className="an-evitar-icon">⛔</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </AnCard>
+            )}
+
+            {/* 7. Dicas do Dog Mau */}
+            {resultado.dicas_dog_mau?.length > 0 && (
+              <AnCard accent="#e8001a">
+                <div className="an-card__label">🐺 DICAS DO DOG MAU</div>
+                <div className="an-dicas">
+                  {resultado.dicas_dog_mau.map((d, i) => (
+                    <div key={i} className="an-dica-item">
+                      <div className="an-dica-texto">{d.dica}</div>
+                      {d.porque && <div className="an-dica-porque">Por quê funciona: {d.porque}</div>}
+                      {i < resultado.dicas_dog_mau.length - 1 && <div className="an-dica-sep" />}
+                    </div>
+                  ))}
+                </div>
+              </AnCard>
+            )}
+
+            {/* 8. Mensagens Sugeridas */}
+            {resultado.mensagens_sugeridas && (
+              <div className="an-card an-card--msgs">
+                <div className="an-card__label">💬 MANDE AGORA</div>
+                <p className="an-msgs-sub">3 opções prontas — escolha seu tom</p>
+                <div className="an-msgs-list">
+                  {Object.entries(resultado.mensagens_sugeridas).map(([tom, val]) => {
+                    const cfg = TOM_CONFIG[tom] || TOM_CONFIG['divertido']
+                    return (
+                      <div key={tom} className="an-msg-card" style={{ borderColor: cfg.border }}>
+                        <div className="an-msg-badge" style={{ color: cfg.color, background: cfg.bg, borderColor: cfg.border }}>
+                          {cfg.badge}
+                        </div>
+                        <div className="an-msg-body">
+                          <div className="an-msg-texto">"{val.mensagem}"</div>
+                          {val.comentario && (
+                            <div className="an-msg-comentario">💡 {val.comentario}</div>
+                          )}
+                        </div>
+                        <CopyBtn text={val.mensagem} />
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* 9. Próximos Passos */}
             <AnCard>
-              <div className="an-card__label">PRÓXIMOS PASSOS</div>
+              <div className="an-card__label">👣 PRÓXIMOS PASSOS</div>
               <ol className="an-steps">
                 {resultado.proximosPassos?.map((p, i) => (
                   <li key={i} className="an-steps__item">
@@ -375,27 +406,27 @@ export default function Analise() {
               </ol>
             </AnCard>
 
-            {/* Card 7: Frase do Momento */}
+            {/* 10. Frase do Momento */}
             <AnCard accent="#e8001a">
               <div className="an-card__label">FRASE DO MOMENTO</div>
               <blockquote className="an-quote">"{resultado.frase}"</blockquote>
             </AnCard>
 
-            {/* Card 8: Previsão */}
+            {/* 11. Previsão */}
             <AnCard>
               <div className="an-card__label">🔮 PREVISÃO</div>
               <p className="an-text">{resultado.previsao}</p>
             </AnCard>
 
-            {/* Card 9: Notas por Objetivo */}
+            {/* 12. Notas por Objetivo */}
             <AnCard>
-              <div className="an-card__label">NOTAS POR OBJETIVO</div>
+              <div className="an-card__label">📊 NOTAS POR OBJETIVO</div>
               <div className="an-obj-bars">
                 {[
-                  { key: 'puxar',    label: '💬 Puxar Assunto',    color: '#60a5fa' },
-                  { key: 'flertar',  label: '💘 Flertar',          color: '#f472b6' },
-                  { key: 'encontro', label: '📍 Marcar Encontro',  color: '#34d399' },
-                  { key: 'reengajar',label: '🔥 Reengajar',        color: '#f97316' },
+                  { key: 'puxar',     label: '💬 Puxar Assunto',   color: '#60a5fa' },
+                  { key: 'flertar',   label: '💘 Flertar',         color: '#f472b6' },
+                  { key: 'encontro',  label: '📍 Marcar Encontro', color: '#34d399' },
+                  { key: 'reengajar', label: '🔥 Reengajar',       color: '#f97316' },
                 ].map(({ key, label, color }) => (
                   <div key={key} className="an-obj-bar">
                     <div className="an-obj-bar__header">
@@ -410,7 +441,6 @@ export default function Analise() {
 
           </div>
         )}
-
       </main>
 
       <BottomNav />

@@ -374,6 +374,190 @@
   text-transform: uppercase;
 }
 
+/* ── Card 3: Sinais Dela (objetos) ───────────────────────── */
+.an-list--sinais {
+  gap: 0.75rem;
+}
+
+.an-sinal-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  list-style: none;
+}
+
+.an-sinal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+
+.an-sinal-texto {
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.an-sinal-interp {
+  font-size: 0.83rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
+/* ── Card 6: O Que Evitar ─────────────────────────────────── */
+.an-evitar-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.an-evitar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: rgba(249, 115, 22, 0.06);
+  border: 1px solid rgba(249, 115, 22, 0.18);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.an-evitar-icon {
+  flex-shrink: 0;
+  font-size: 0.95rem;
+  margin-top: 0.05rem;
+}
+
+/* ── Card 7: Dicas do Dog Mau ────────────────────────────── */
+.an-dicas {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.an-dica-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.85rem 0;
+}
+
+.an-dica-texto {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.an-dica-porque {
+  font-size: 0.83rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.an-dica-sep {
+  height: 1px;
+  background: rgba(232, 0, 26, 0.2);
+  margin-top: 0.4rem;
+}
+
+/* ── Card 8: Mensagens Sugeridas ─────────────────────────── */
+.an-card--msgs {
+  gap: 0.8rem;
+}
+
+.an-msgs-sub {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+.an-msgs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.an-msg-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  position: relative;
+}
+
+.an-msg-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid currentColor;
+  align-self: flex-start;
+  font-weight: 700;
+}
+
+.an-msg-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-right: 2rem;
+}
+
+.an-msg-texto {
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.an-msg-comentario {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.an-copy-btn {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+
+.an-copy-btn:hover {
+  background: var(--bg-surface);
+  color: var(--text);
+}
+
+.an-copy-btn.copied {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #86efac;
+}
+
 /* ── Mobile ───────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .an-card {
@@ -390,5 +574,8 @@
   }
   .an-estagio-name {
     font-size: 0.42rem;
+  }
+  .an-msg-body {
+    padding-right: 2.5rem;
   }
 }
